@@ -1,0 +1,1066 @@
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>She Can Foundation – Empowering Every Girl</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@300;400;600;700;800;900&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── CSS VARIABLES ──────────────────────────────────────── */
+    :root {
+      --pink:   #FF1E6E;
+      --yellow: #FFD600;
+      --purple: #7C3AED;
+      --dark:   #09090F;
+      --card:   #13131E;
+      --border: rgba(255,255,255,0.08);
+      --text:   #FFFFFF;
+      --muted:  #A0A0B8;
+      --radius: 16px;
+      --transition: 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    [data-theme="light"] {
+      --dark:   #F5F4FF;
+      --card:   #FFFFFF;
+      --border: rgba(0,0,0,0.08);
+      --text:   #0A0A14;
+      --muted:  #5A5A78;
+    }
+
+    /* ─── RESET ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--dark);
+      color: var(--text);
+      overflow-x: hidden;
+      cursor: none;
+    }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    /* ─── CUSTOM CURSOR ──────────────────────────────────────── */
+    #cursor {
+      position: fixed; top: 0; left: 0; width: 14px; height: 14px;
+      background: var(--pink); border-radius: 50%;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: width .2s, height .2s, background .2s;
+      mix-blend-mode: difference;
+    }
+    #cursor-ring {
+      position: fixed; top: 0; left: 0; width: 40px; height: 40px;
+      border: 1.5px solid var(--pink); border-radius: 50%;
+      pointer-events: none; z-index: 9998;
+      transform: translate(-50%,-50%);
+      transition: all .12s ease-out;
+      opacity: 0.6;
+    }
+    body:hover #cursor { width: 16px; height: 16px; }
+
+    /* ─── SCROLL PROGRESS ────────────────────────────────────── */
+    #progress {
+      position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+      background: linear-gradient(90deg, var(--pink), var(--yellow));
+      z-index: 10000; transition: width .1s;
+    }
+
+    /* ─── NAVBAR ─────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; width: 100%;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 5%; z-index: 1000;
+      transition: background var(--transition), backdrop-filter var(--transition);
+    }
+    nav.scrolled {
+      background: rgba(9,9,15,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    [data-theme="light"] nav.scrolled { background: rgba(245,244,255,0.85); }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem; letter-spacing: 2px;
+      background: linear-gradient(135deg, var(--pink), var(--yellow));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-weight: 700; font-size: .85rem; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--muted);
+      transition: color .2s; position: relative;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0;
+      width: 0; height: 2px; background: var(--pink);
+      transition: width .3s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    #theme-btn {
+      background: var(--border); border: 1px solid var(--border);
+      color: var(--text); padding: .5rem .9rem; border-radius: 8px;
+      cursor: pointer; font-size: .85rem; font-weight: 700;
+      transition: background .2s;
+    }
+    #theme-btn:hover { background: var(--pink); color: #fff; }
+    .nav-cta {
+      background: var(--pink); color: #fff;
+      padding: .55rem 1.3rem; border-radius: 8px;
+      font-weight: 800; font-size: .85rem; letter-spacing: .5px;
+      transition: transform .2s, box-shadow .2s;
+      box-shadow: 0 0 0 0 rgba(255,30,110,.4);
+    }
+    .nav-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(255,30,110,.5);
+    }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span {
+      display: block; width: 26px; height: 2px;
+      background: var(--text); border-radius: 2px;
+      transition: all .3s;
+    }
+
+    /* ─── HERO ───────────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh; position: relative; display: flex;
+      align-items: center; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 60% 50%, rgba(124,58,237,.25) 0%, transparent 60%),
+                  radial-gradient(ellipse 50% 50% at 10% 80%, rgba(255,30,110,.2) 0%, transparent 50%),
+                  var(--dark);
+    }
+    .particles { position: absolute; inset: 0; pointer-events: none; }
+    .p-dot {
+      position: absolute; border-radius: 50%;
+      animation: float-dot linear infinite;
+      opacity: .6;
+    }
+    @keyframes float-dot {
+      0%   { transform: translateY(0) rotate(0deg); opacity: .6; }
+      100% { transform: translateY(-110vh) rotate(720deg); opacity: 0; }
+    }
+    .hero-content {
+      position: relative; z-index: 2; padding: 0 5%;
+      max-width: 760px; margin-top: 5rem;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: rgba(255,30,110,.15); border: 1px solid rgba(255,30,110,.4);
+      color: var(--pink); padding: .4rem 1rem; border-radius: 40px;
+      font-size: .78rem; font-weight: 800; letter-spacing: 2px;
+      text-transform: uppercase; margin-bottom: 1.5rem;
+      animation: fade-up .8s ease both;
+    }
+    .hero-badge span { animation: pulse-dot 1.5s infinite; }
+    @keyframes pulse-dot {
+      0%,100% { opacity:1; transform:scale(1); }
+      50%      { opacity:.4; transform:scale(.8); }
+    }
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 11vw, 9.5rem);
+      line-height: .95; letter-spacing: 2px;
+      animation: fade-up .9s .15s ease both;
+    }
+    .hero-title span { color: var(--pink); }
+    .hero-title em {
+      font-family: 'Playfair Display', serif;
+      font-style: italic; color: var(--yellow);
+    }
+    .hero-sub {
+      margin-top: 1.5rem; font-size: 1.1rem; line-height: 1.7;
+      color: var(--muted); max-width: 500px;
+      animation: fade-up 1s .3s ease both;
+    }
+    .hero-actions {
+      margin-top: 2.5rem; display: flex; gap: 1rem; flex-wrap: wrap;
+      animation: fade-up 1s .45s ease both;
+    }
+    .btn-primary {
+      background: var(--pink); color: #fff;
+      padding: 1rem 2.2rem; border-radius: 12px;
+      font-weight: 800; font-size: 1rem; letter-spacing: .5px;
+      border: none; cursor: pointer;
+      transition: transform .2s, box-shadow .2s;
+      box-shadow: 0 4px 30px rgba(255,30,110,.4);
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(255,30,110,.55);
+    }
+    .btn-outline {
+      background: transparent; color: var(--text);
+      padding: 1rem 2.2rem; border-radius: 12px;
+      font-weight: 800; font-size: 1rem;
+      border: 2px solid var(--border); cursor: pointer;
+      transition: border-color .2s, background .2s;
+    }
+    .btn-outline:hover {
+      border-color: var(--yellow); background: rgba(255,214,0,.07);
+    }
+    .hero-image-wrapper {
+      position: absolute; right: -2%; top: 0; bottom: 0;
+      width: 52%; z-index: 1;
+      clip-path: polygon(15% 0%, 100% 0%, 100% 100%, 0% 100%);
+    }
+    .hero-image-wrapper img {
+      width: 100%; height: 100%; object-fit: cover; object-position: center top;
+    }
+    .hero-image-wrapper::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(100deg, var(--dark) 0%, transparent 40%),
+                  linear-gradient(0deg, var(--dark) 0%, transparent 30%);
+    }
+    .hero-stats {
+      position: absolute; bottom: 4rem; right: 5%;
+      display: flex; gap: 1.5rem; z-index: 3;
+      animation: fade-up 1s .6s ease both;
+    }
+    .stat-card {
+      background: rgba(255,255,255,.06);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      border-radius: 14px; padding: 1rem 1.4rem;
+      text-align: center;
+    }
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.4rem; color: var(--yellow);
+      line-height: 1;
+    }
+    .stat-label { font-size: .75rem; color: var(--muted); margin-top: .3rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+    .scroll-hint {
+      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: .4rem;
+      font-size: .7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted);
+      animation: fade-up 1s .8s ease both;
+    }
+    .scroll-line {
+      width: 1px; height: 50px;
+      background: linear-gradient(var(--pink), transparent);
+      animation: grow-line 1.5s ease infinite;
+    }
+    @keyframes grow-line {
+      0%,100% { height: 30px; opacity: .4; }
+      50%      { height: 55px; opacity: 1; }
+    }
+
+    /* ─── MARQUEE BAND ───────────────────────────────────────── */
+    .marquee-band {
+      background: var(--pink); overflow: hidden;
+      padding: .9rem 0; white-space: nowrap;
+    }
+    .marquee-track {
+      display: inline-flex; gap: 3rem;
+      animation: marquee-scroll 20s linear infinite;
+    }
+    .marquee-band:hover .marquee-track { animation-play-state: paused; }
+    @keyframes marquee-scroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .marquee-item {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem; letter-spacing: 3px; color: #fff;
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .marquee-dot {
+      width: 6px; height: 6px; background: #fff;
+      border-radius: 50%; flex-shrink: 0;
+    }
+
+    /* ─── SECTION COMMONS ────────────────────────────────────── */
+    section { padding: 8rem 5%; }
+    .section-tag {
+      display: inline-block;
+      font-size: .75rem; font-weight: 800;
+      letter-spacing: 3px; text-transform: uppercase;
+      color: var(--pink); margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      letter-spacing: 2px; line-height: 1;
+    }
+    .section-title span { color: var(--pink); }
+    .section-title em {
+      font-family: 'Playfair Display', serif;
+      font-style: italic; color: var(--yellow);
+    }
+    .fade-in { opacity: 0; transform: translateY(40px); transition: opacity .7s ease, transform .7s ease; }
+    .fade-in.visible { opacity: 1; transform: none; }
+
+    /* ─── ABOUT ──────────────────────────────────────────────── */
+    #about { background: var(--dark); }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 5rem; align-items: center; max-width: 1200px; margin: 0 auto;
+    }
+    .about-image-block { position: relative; }
+    .about-img-main {
+      width: 100%; border-radius: 24px;
+      object-fit: cover; aspect-ratio: 4/5;
+      box-shadow: 0 30px 80px rgba(0,0,0,.5);
+    }
+    .about-img-badge {
+      position: absolute; bottom: -1.5rem; right: -1.5rem;
+      background: var(--yellow); color: #0A0A14;
+      padding: 1.2rem 1.5rem; border-radius: 16px;
+      font-weight: 900; font-size: .9rem; line-height: 1.3;
+    }
+    .about-img-badge strong { display: block; font-size: 2rem; font-family: 'Bebas Neue', sans-serif; letter-spacing: 1px; }
+    .about-text h2 { margin-bottom: 1.5rem; }
+    .about-text p { color: var(--muted); font-size: 1.05rem; line-height: 1.8; margin-bottom: 1.2rem; }
+    .about-text p strong { color: var(--text); font-weight: 800; }
+    .about-pillars {
+      display: flex; flex-direction: column; gap: .7rem; margin-top: 2rem;
+    }
+    .pillar {
+      display: flex; align-items: center; gap: 1rem;
+      padding: .9rem 1.2rem;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px;
+      transition: border-color .2s, transform .2s;
+    }
+    .pillar:hover { border-color: var(--pink); transform: translateX(6px); }
+    .pillar-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: rgba(255,30,110,.15); display: flex; align-items: center;
+      justify-content: center; font-size: 1.2rem; flex-shrink: 0;
+    }
+    .pillar-text { font-weight: 700; font-size: .95rem; }
+    .pillar-sub { font-size: .8rem; color: var(--muted); margin-top: .15rem; }
+
+    /* ─── IMPACT / STATS ─────────────────────────────────────── */
+    #impact {
+      background: linear-gradient(135deg, rgba(124,58,237,.15) 0%, transparent 50%),
+                  var(--card);
+      text-align: center;
+    }
+    .impact-inner { max-width: 1100px; margin: 0 auto; }
+    .impact-inner h2 { margin-bottom: 1rem; }
+    .impact-inner p { color: var(--muted); font-size: 1rem; max-width: 540px; margin: 0 auto 3.5rem; }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+    .stat-item {
+      background: var(--dark); border: 1px solid var(--border);
+      border-radius: 20px; padding: 2rem 1.5rem;
+      transition: border-color .3s, transform .3s;
+    }
+    .stat-item:hover { border-color: var(--pink); transform: translateY(-6px); }
+    .stat-item .big-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 4rem; color: var(--pink); line-height: 1;
+    }
+    .stat-item .big-num .suffix { color: var(--yellow); }
+    .stat-item .stat-desc { color: var(--muted); font-size: .9rem; font-weight: 600; margin-top: .5rem; letter-spacing: .5px; }
+
+    /* ─── PROGRAMS ───────────────────────────────────────────── */
+    #programs { background: var(--dark); }
+    .programs-header { max-width: 600px; margin-bottom: 3.5rem; }
+    .programs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .prog-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 20px; overflow: hidden;
+      transition: transform .3s, box-shadow .3s, border-color .3s;
+      cursor: pointer;
+    }
+    .prog-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 60px rgba(0,0,0,.4);
+      border-color: rgba(255,30,110,.4);
+    }
+    .prog-card-img {
+      width: 100%; height: 200px; object-fit: cover;
+      transition: transform .5s;
+    }
+    .prog-card:hover .prog-card-img { transform: scale(1.04); }
+    .prog-card-body { padding: 1.4rem 1.5rem; }
+    .prog-tag {
+      font-size: .7rem; font-weight: 800; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--yellow);
+      margin-bottom: .6rem;
+    }
+    .prog-title { font-weight: 900; font-size: 1.1rem; margin-bottom: .5rem; }
+    .prog-desc { color: var(--muted); font-size: .88rem; line-height: 1.6; }
+    .prog-link {
+      display: inline-flex; align-items: center; gap: .4rem;
+      margin-top: 1rem; font-size: .82rem; font-weight: 800;
+      color: var(--pink); letter-spacing: .5px;
+      transition: gap .2s;
+    }
+    .prog-card:hover .prog-link { gap: .7rem; }
+    .arrow { transition: transform .2s; }
+    .prog-card:hover .arrow { transform: translateX(4px); }
+
+    /* ─── TESTIMONIAL ────────────────────────────────────────── */
+    #testimonial {
+      background: var(--pink);
+      text-align: center; padding: 7rem 5%;
+    }
+    .quote-mark {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 10rem; line-height: .6; color: rgba(0,0,0,.15);
+      margin-bottom: -2rem;
+    }
+    .quote-text {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      color: #fff; max-width: 800px; margin: 0 auto;
+      line-height: 1.45;
+    }
+    .quote-author {
+      margin-top: 1.8rem; font-weight: 800; color: rgba(255,255,255,.75);
+      font-size: .9rem; letter-spacing: 2px; text-transform: uppercase;
+    }
+
+    /* ─── IMAGE GALLERY ──────────────────────────────────────── */
+    #gallery { background: var(--dark); overflow: hidden; }
+    .gallery-header { max-width: 600px; margin-bottom: 3rem; }
+    .gallery-masonry {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: auto;
+      gap: 1rem;
+    }
+    .g-item {
+      border-radius: 16px; overflow: hidden;
+      position: relative; cursor: zoom-in;
+    }
+    .g-item:nth-child(1) { grid-row: span 2; }
+    .g-item:nth-child(4) { grid-column: span 2; }
+    .g-item img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform .5s; display: block;
+    }
+    .g-item:hover img { transform: scale(1.06); }
+    .g-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(0deg, rgba(255,30,110,.7) 0%, transparent 50%);
+      opacity: 0; transition: opacity .3s;
+      display: flex; align-items: flex-end; padding: 1.2rem;
+    }
+    .g-item:hover .g-overlay { opacity: 1; }
+    .g-overlay span { color: #fff; font-weight: 800; font-size: .85rem; letter-spacing: 1px; }
+
+    /* ─── JOIN CTA ────────────────────────────────────────────── */
+    #join {
+      background: var(--dark);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .join-box {
+      max-width: 900px; width: 100%;
+      background: linear-gradient(135deg, var(--purple), var(--pink));
+      border-radius: 28px; padding: 5rem 4rem;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .join-box::before {
+      content: ''; position: absolute; top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse at 60% 50%, rgba(255,214,0,.12) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .join-box .section-tag { color: rgba(255,255,255,.7); }
+    .join-box h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      color: #fff; letter-spacing: 2px; line-height: 1; margin-bottom: 1rem;
+    }
+    .join-box p { color: rgba(255,255,255,.8); font-size: 1rem; margin-bottom: 2.5rem; }
+    .join-btn {
+      background: #fff; color: var(--pink);
+      padding: 1rem 2.8rem; border-radius: 12px;
+      font-weight: 900; font-size: 1rem; border: none;
+      cursor: pointer; letter-spacing: .5px;
+      transition: transform .2s, box-shadow .2s;
+      box-shadow: 0 4px 20px rgba(0,0,0,.2);
+    }
+    .join-btn:hover { transform: scale(1.04) translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,.3); }
+
+    /* ─── FOOTER ─────────────────────────────────────────────── */
+    footer {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      padding: 4rem 5% 2rem;
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem; max-width: 1200px; margin: 0 auto 3rem;
+    }
+    .footer-brand .nav-logo { margin-bottom: .8rem; font-size: 1.6rem; }
+    .footer-brand p { color: var(--muted); font-size: .9rem; line-height: 1.7; max-width: 280px; margin-bottom: 1.5rem; }
+    .footer-socials { display: flex; gap: .8rem; }
+    .social-link {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: var(--border); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .9rem; font-weight: 800; color: var(--muted);
+      transition: background .2s, color .2s;
+    }
+    .social-link:hover { background: var(--pink); color: #fff; }
+    .footer-col h4 { font-weight: 800; font-size: .85rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 1.2rem; color: var(--text); }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: .6rem; }
+    .footer-col li a { color: var(--muted); font-size: .9rem; transition: color .2s; }
+    .footer-col li a:hover { color: var(--pink); }
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem; max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-bottom p { color: var(--muted); font-size: .82rem; }
+    .footer-bottom span { color: var(--pink); }
+
+    /* ─── ANIMATIONS ─────────────────────────────────────────── */
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: none; }
+    }
+    @keyframes spin-slow {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    /* ─── MOBILE MENU ────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .nav-links { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%; background: var(--card); border-bottom: 1px solid var(--border); padding: 1.5rem 5%; gap: 1.2rem; }
+      .nav-links.open { display: flex; }
+      .hamburger { display: flex; }
+      .nav-cta { display: none; }
+    }
+    @media (max-width: 900px) {
+      .hero-image-wrapper { display: none; }
+      .hero-content { max-width: 100%; }
+      .hero-stats { position: static; margin-top: 3rem; }
+      #hero { flex-direction: column; padding-bottom: 3rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .gallery-masonry { grid-template-columns: 1fr 1fr; }
+      .g-item:nth-child(1) { grid-row: auto; }
+      .g-item:nth-child(4) { grid-column: auto; }
+    }
+    @media (max-width: 560px) {
+      section { padding: 5rem 5%; }
+      .hero-stats { flex-wrap: wrap; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .join-box { padding: 3rem 1.8rem; }
+      .gallery-masonry { grid-template-columns: 1fr; }
+    }
+
+    /* ─── LIGHTBOX ───────────────────────────────────────────── */
+    #lightbox {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.92); z-index: 9997;
+      align-items: center; justify-content: center;
+    }
+    #lightbox.open { display: flex; }
+    #lightbox img { max-width: 90vw; max-height: 85vh; border-radius: 12px; }
+    #lb-close {
+      position: absolute; top: 1.5rem; right: 1.5rem;
+      color: #fff; font-size: 2rem; cursor: pointer; background: none; border: none;
+      font-weight: 300; line-height: 1;
+    }
+    #lb-close:hover { color: var(--pink); }
+  </style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- SCROLL PROGRESS -->
+<div id="progress"></div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" role="dialog" aria-modal="true">
+  <button id="lb-close" aria-label="Close lightbox">&times;</button>
+  <img id="lb-img" src="" alt="Gallery image" />
+</div>
+
+<!-- ── NAVBAR ─────────────────────────────────── -->
+<nav id="navbar">
+  <div class="nav-logo">She Can</div>
+  <button class="hamburger" id="ham" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#impact">Impact</a></li>
+    <li><a href="#programs">Programs</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#join">Join Us</a></li>
+  </ul>
+  <div class="nav-right">
+    <button id="theme-btn" aria-label="Toggle dark/light mode">☀ Light</button>
+    <a href="#join" class="nav-cta">Get Involved →</a>
+  </div>
+</nav>
+
+<!-- ── HERO ───────────────────────────────────── -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="particles" id="particles"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span>●</span> Youth-Driven NGO &nbsp;·&nbsp; Building Futures
+    </div>
+    <h1 class="hero-title">
+      Every<br/>
+      Girl<br/>
+      <em>Can.</em>
+    </h1>
+    <p class="hero-sub">
+      She Can Foundation creates opportunities, breaks barriers, and sparks real change —
+      through education, digital skills, and community-led programs that believe in
+      <strong>every student's potential.</strong>
+    </p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="document.getElementById('join').scrollIntoView({behavior:'smooth'})">
+        Join the Movement ↗
+      </button>
+      <button class="btn-outline" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">
+        Learn More
+      </button>
+    </div>
+  </div>
+
+  <div class="hero-image-wrapper">
+    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=900&q=80&auto=format&fit=crop"
+         alt="Empowered young woman" loading="eager" />
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-card fade-in">
+      <div class="stat-num" data-target="500">0</div>
+      <div class="stat-label">Students Reached</div>
+    </div>
+    <div class="stat-card fade-in">
+      <div class="stat-num" data-target="20">0</div>
+      <div class="stat-label">Programs Run</div>
+    </div>
+    <div class="stat-card fade-in">
+      <div class="stat-num" data-target="15">0</div>
+      <div class="stat-label">Chapters Active</div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ── MARQUEE ────────────────────────────────── -->
+<div class="marquee-band">
+  <div class="marquee-track" id="marquee">
+    <!-- JS duplicates these -->
+    <div class="marquee-item"><div class="marquee-dot"></div> Education</div>
+    <div class="marquee-item"><div class="marquee-dot"></div> Digital Skills</div>
+    <div class="marquee-item"><div class="marquee-dot"></div> Community Impact</div>
+    <div class="marquee-item"><div class="marquee-dot"></div> Youth Empowerment</div>
+    <div class="marquee-item"><div class="marquee-dot"></div> Social Change</div>
+    <div class="marquee-item"><div class="marquee-dot"></div> Zero Barriers</div>
+    <div class="marquee-item"><div class="marquee-dot"></div> Opportunities for All</div>
+    <div class="marquee-item"><div class="marquee-dot"></div> She Can Foundation</div>
+    <div class="marquee-item"><div class="marquee-dot"></div> Education</div>
+    <div class="marquee-item"><div class="marquee-dot"></div> Digital Skills</div>
+    <div class="marquee-item"><div class="marquee-dot"></div> Community Impact</div>
+    <div class="marquee-item"><div class="marquee-dot"></div> Youth Empowerment</div>
+    <div class="marquee-item"><div class="marquee-dot"></div> Social Change</div>
+    <div class="marquee-item"><div class="marquee-dot"></div> Zero Barriers</div>
+    <div class="marquee-item"><div class="marquee-dot"></div> Opportunities for All</div>
+    <div class="marquee-item"><div class="marquee-dot"></div> She Can Foundation</div>
+  </div>
+</div>
+
+<!-- ── ABOUT ──────────────────────────────────── -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-image-block fade-in">
+      <img class="about-img-main"
+           src="https://images.unsplash.com/photo-1529390079861-591de354faf5?w=700&q=80&auto=format&fit=crop"
+           alt="Students learning together" loading="lazy" />
+      <div class="about-img-badge">
+        <strong>100%</strong>
+        Student-Driven Mission
+      </div>
+    </div>
+
+    <div class="about-text fade-in">
+      <div class="section-tag">Who We Are</div>
+      <h2 class="section-title">More Than<br/>An <em>NGO.</em><br/>A <span>Movement.</span></h2>
+      <p>
+        <strong>She Can Foundation</strong> is a youth-driven NGO working towards creating opportunities,
+        awareness, and positive social impact through education, digital initiatives,
+        and community-driven programs.
+      </p>
+      <p>
+        We genuinely understand that many students struggle to find opportunities where they can
+        learn practical skills, build confidence, and gain experience without unnecessary pressure
+        or unrealistic expectations.
+      </p>
+      <p>
+        <strong>At She Can Foundation, we believe talent should not be judged only by experience.</strong>
+        Every student deserves a fair chance to learn, explore, and grow.
+      </p>
+
+      <div class="about-pillars">
+        <div class="pillar">
+          <div class="pillar-icon">🎓</div>
+          <div>
+            <div class="pillar-text">Education First</div>
+            <div class="pillar-sub">Practical skills with zero pressure</div>
+          </div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">💻</div>
+          <div>
+            <div class="pillar-text">Digital Initiatives</div>
+            <div class="pillar-sub">Tech access for every student</div>
+          </div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">🌍</div>
+          <div>
+            <div class="pillar-text">Community-Driven Programs</div>
+            <div class="pillar-sub">Real impact, real connections</div>
+          </div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">💛</div>
+          <div>
+            <div class="pillar-text">Zero Gatekeeping</div>
+            <div class="pillar-sub">Talent over experience, always</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── IMPACT STATS ───────────────────────────── -->
+<section id="impact">
+  <div class="impact-inner">
+    <div class="fade-in">
+      <div class="section-tag">Our Impact</div>
+      <h2 class="section-title">Numbers That<br/><em>Matter.</em></h2>
+      <p>Every figure represents a life changed, a barrier broken, a dream brought closer to reality.</p>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-item fade-in">
+        <div class="big-num"><span class="counter" data-target="500">0</span><span class="suffix">+</span></div>
+        <div class="stat-desc">Students Reached</div>
+      </div>
+      <div class="stat-item fade-in">
+        <div class="big-num"><span class="counter" data-target="20">0</span><span class="suffix">+</span></div>
+        <div class="stat-desc">Programs Launched</div>
+      </div>
+      <div class="stat-item fade-in">
+        <div class="big-num"><span class="counter" data-target="15">0</span><span class="suffix">+</span></div>
+        <div class="stat-desc">Active Chapters</div>
+      </div>
+      <div class="stat-item fade-in">
+        <div class="big-num"><span class="counter" data-target="100">0</span><span class="suffix">%</span></div>
+        <div class="stat-desc">Youth-Led Initiative</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PROGRAMS ───────────────────────────────── -->
+<section id="programs">
+  <div class="programs-header fade-in">
+    <div class="section-tag">What We Do</div>
+    <h2 class="section-title">Our <span>Programs</span></h2>
+    <p style="color:var(--muted);margin-top:1rem;line-height:1.7;">
+      Hands-on, student-centred programs designed to build skills, confidence, and connections.
+    </p>
+  </div>
+
+  <div class="programs-grid">
+    <div class="prog-card fade-in">
+      <img class="prog-card-img"
+           src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=600&q=80&auto=format&fit=crop"
+           alt="Digital Skills Workshop" loading="lazy" />
+      <div class="prog-card-body">
+        <div class="prog-tag">Digital</div>
+        <div class="prog-title">Tech & Digital Skills</div>
+        <div class="prog-desc">Web development, design, and digital literacy workshops built for absolute beginners — no experience needed.</div>
+        <a href="https://shecanfoundation.org/" target="_blank" class="prog-link">Explore Program <span class="arrow">→</span></a>
+      </div>
+    </div>
+    <div class="prog-card fade-in">
+      <img class="prog-card-img"
+           src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&q=80&auto=format&fit=crop"
+           alt="Community Programs" loading="lazy" />
+      <div class="prog-card-body">
+        <div class="prog-tag">Community</div>
+        <div class="prog-title">Community Leadership</div>
+        <div class="prog-desc">Real-world projects that develop leadership, communication, and social impact skills in youth communities.</div>
+        <a href="https://shecanfoundation.org/" target="_blank" class="prog-link">Explore Program <span class="arrow">→</span></a>
+      </div>
+    </div>
+    <div class="prog-card fade-in">
+      <img class="prog-card-img"
+           src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=600&q=80&auto=format&fit=crop"
+           alt="Education Awareness" loading="lazy" />
+      <div class="prog-card-body">
+        <div class="prog-tag">Education</div>
+        <div class="prog-title">Awareness & Mentorship</div>
+        <div class="prog-desc">Awareness campaigns and one-on-one mentorship that guide students toward meaningful career pathways.</div>
+        <a href="https://shecanfoundation.org/" target="_blank" class="prog-link">Explore Program <span class="arrow">→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── QUOTE ──────────────────────────────────── -->
+<section id="testimonial">
+  <div class="quote-mark">"</div>
+  <blockquote class="quote-text">
+    Talent should not be judged only by experience.
+    Every student deserves a fair chance to learn, explore, and grow.
+  </blockquote>
+  <p class="quote-author">— She Can Foundation Mission</p>
+</section>
+
+<!-- ── GALLERY ────────────────────────────────── -->
+<section id="gallery">
+  <div class="gallery-header fade-in">
+    <div class="section-tag">Our Stories</div>
+    <h2 class="section-title">Real <em>Moments,</em><br/>Real <span>Impact.</span></h2>
+  </div>
+
+  <div class="gallery-masonry">
+    <div class="g-item fade-in">
+      <img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?w=500&q=80&auto=format&fit=crop"
+           alt="Girls collaborating" loading="lazy" />
+      <div class="g-overlay"><span>Collaboration →</span></div>
+    </div>
+    <div class="g-item fade-in">
+      <img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=500&q=80&auto=format&fit=crop"
+           alt="Workshop session" loading="lazy" />
+      <div class="g-overlay"><span>Workshops →</span></div>
+    </div>
+    <div class="g-item fade-in">
+      <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&q=80&auto=format&fit=crop"
+           alt="Digital learning" loading="lazy" />
+      <div class="g-overlay"><span>Digital Skills →</span></div>
+    </div>
+    <div class="g-item fade-in">
+      <img src="https://images.unsplash.com/photo-1531545514256-b1400bc00f31?w=800&q=80&auto=format&fit=crop"
+           alt="Community event" loading="lazy" />
+      <div class="g-overlay"><span>Community Events →</span></div>
+    </div>
+    <div class="g-item fade-in">
+      <img src="https://images.unsplash.com/photo-1598257006626-48b0c252070d?w=500&q=80&auto=format&fit=crop"
+           alt="Youth leaders" loading="lazy" />
+      <div class="g-overlay"><span>Youth Leaders →</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── JOIN CTA ───────────────────────────────── -->
+<section id="join" style="padding:5rem 5%;">
+  <div class="join-box fade-in">
+    <div class="section-tag">Be Part of the Change</div>
+    <h2>Join the<br/>She Can Movement</h2>
+    <p>Whether you're a student, mentor, or organization — there's a place for you here.<br/>We welcome every voice, every skill, every dream.</p>
+    <button class="join-btn" onclick="window.open('https://shecanfoundation.org/','_blank')">
+      Get Involved at shecanfoundation.org →
+    </button>
+  </div>
+</section>
+
+<!-- ── FOOTER ────────────────────────────────── -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="nav-logo">She Can</div>
+      <p>A youth-driven NGO creating opportunities and positive social impact through education, digital initiatives, and community-driven programs.</p>
+      <div class="footer-socials">
+        <a href="https://shecanfoundation.org/" target="_blank" class="social-link" aria-label="Website">W</a>
+        <a href="#" class="social-link" aria-label="Instagram">In</a>
+        <a href="#" class="social-link" aria-label="LinkedIn">Li</a>
+        <a href="#" class="social-link" aria-label="Twitter">Tw</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Navigate</h4>
+      <ul>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#impact">Our Impact</a></li>
+        <li><a href="#programs">Programs</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Programs</h4>
+      <ul>
+        <li><a href="https://shecanfoundation.org/" target="_blank">Tech & Digital</a></li>
+        <li><a href="https://shecanfoundation.org/" target="_blank">Leadership</a></li>
+        <li><a href="https://shecanfoundation.org/" target="_blank">Mentorship</a></li>
+        <li><a href="https://shecanfoundation.org/" target="_blank">Awareness</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Connect</h4>
+      <ul>
+        <li><a href="https://shecanfoundation.org/" target="_blank">shecanfoundation.org</a></li>
+        <li><a href="#join">Volunteer</a></li>
+        <li><a href="#join">Partner With Us</a></li>
+        <li><a href="#join">Donate</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 <span>She Can Foundation</span>. All rights reserved. Built with ♥ for every girl who dares to dream.</p>
+    <p style="color:var(--muted); font-size:.8rem;">Youth-Driven · Community-Led · Impact-Focused</p>
+  </div>
+</footer>
+
+<!-- ─────────── JAVASCRIPT ──────────────────── -->
+<script>
+  /* ── CURSOR ─────────────────────────────── */
+  const cursor = document.getElementById('cursor');
+  const ring   = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  (function animCursor() {
+    rx += (mx - rx) * 0.15;
+    ry += (my - ry) * 0.15;
+    cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+    ring.style.left   = rx + 'px'; ring.style.top  = ry + 'px';
+    requestAnimationFrame(animCursor);
+  })();
+  document.querySelectorAll('a,button,.prog-card,.g-item,.pillar').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.style.width = '30px'; cursor.style.height = '30px'; });
+    el.addEventListener('mouseleave', () => { cursor.style.width = '14px'; cursor.style.height = '14px'; });
+  });
+
+  /* ── SCROLL PROGRESS ────────────────────── */
+  const prog = document.getElementById('progress');
+  window.addEventListener('scroll', () => {
+    const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+    prog.style.width = pct + '%';
+  });
+
+  /* ── NAVBAR SCROLL ──────────────────────── */
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  /* ── HAMBURGER ──────────────────────────── */
+  document.getElementById('ham').addEventListener('click', function() {
+    document.getElementById('nav-links').classList.toggle('open');
+  });
+
+  /* ── DARK / LIGHT TOGGLE ────────────────── */
+  const themeBtn = document.getElementById('theme-btn');
+  themeBtn.addEventListener('click', () => {
+    const html = document.documentElement;
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    themeBtn.textContent = isDark ? '🌙 Dark' : '☀ Light';
+  });
+
+  /* ── PARTICLES ──────────────────────────── */
+  const pContainer = document.getElementById('particles');
+  const colors = ['#FF1E6E','#FFD600','#7C3AED','#fff'];
+  for (let i = 0; i < 40; i++) {
+    const d = document.createElement('div');
+    d.className = 'p-dot';
+    const size = Math.random() * 6 + 2;
+    const left = Math.random() * 100;
+    const delay = Math.random() * 15;
+    const duration = Math.random() * 10 + 10;
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    Object.assign(d.style, {
+      width: size + 'px', height: size + 'px',
+      left: left + '%', bottom: '-20px',
+      background: color,
+      animationDelay: delay + 's',
+      animationDuration: duration + 's',
+    });
+    pContainer.appendChild(d);
+  }
+
+  /* ── INTERSECTION OBSERVER (fade-in) ────── */
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  /* ── COUNTER ANIMATION ──────────────────── */
+  function animateCounter(el) {
+    const target = parseInt(el.dataset.target, 10);
+    let current = 0;
+    const step = Math.ceil(target / 60);
+    const timer = setInterval(() => {
+      current = Math.min(current + step, target);
+      el.textContent = current;
+      if (current >= target) clearInterval(timer);
+    }, 25);
+  }
+  const counterObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.querySelectorAll('.counter,[data-target]').forEach(animateCounter);
+        counterObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('#impact, #hero .hero-stats').forEach(el => counterObs.observe(el));
+
+  /* ── GALLERY LIGHTBOX ───────────────────── */
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lb-img');
+  document.querySelectorAll('.g-item img').forEach(img => {
+    img.addEventListener('click', () => {
+      lbImg.src = img.src.replace('w=500','w=1200').replace('w=800','w=1200');
+      lbImg.alt = img.alt;
+      lb.classList.add('open');
+    });
+  });
+  document.getElementById('lb-close').addEventListener('click', () => lb.classList.remove('open'));
+  lb.addEventListener('click', e => { if (e.target === lb) lb.classList.remove('open'); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') lb.classList.remove('open'); });
+
+  /* ── SMOOTH SCROLL FOR NAV LINKS ────────── */
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+      document.getElementById('nav-links').classList.remove('open');
+    });
+  });
+</script>
+</body>
+</html>
